@@ -1,5 +1,4 @@
 import boto3
-import pandas 
 
 """
 Class that interacts with an s3 bucket
@@ -33,21 +32,6 @@ class S3Handler:
         s3 = boto3.resource('s3')
         obj = s3.Object(self.bucket, subfolder)
         return obj.get()['Body'].read().decode('utf-8')
-
-    """
-    Upload a dataframe to S3 as csv
-
-    Args:
-        df (pandas.DataFrame): The dataframe to upload
-        subfolder (str): The subfolder to upload to
-
-    Returns:
-        bool: True if the dataframe was uploaded, False otherwise
-    """
-    def push_df_to_s3_csv(self,subfolder,df) -> bool:
-        s3 = boto3.resource('s3')
-        response = s3.Object(self.bucket, subfolder).put(Body=df.to_csv(index=False))
-        return response['ResponseMetadata']['HTTPStatusCode'] == 200
 
     """
     Upload string to s3 
@@ -88,7 +72,7 @@ class S3Handler:
     """
     def delete_from_s3(self,subfolder) -> bool:
         response = self.s3.delete_object(Bucket=self.bucket, Key=subfolder)
-        return response['ResponseMetadata']['HTTPStatusCode'] == 200
+        return response['ResponseMetadata']['HTTPStatusCode'] == 204
     
     """
     Create a subfolder in S3
