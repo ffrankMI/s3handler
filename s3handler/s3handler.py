@@ -50,6 +50,21 @@ class S3Handler:
         return response['ResponseMetadata']['HTTPStatusCode'] == 200
 
     """
+    Upload string to s3 
+
+    Args:
+        string (str): The string to upload
+        subfolder (str): The subfolder to upload to
+
+    Returns:
+        bool: True if the string was uploaded, False otherwise
+    """
+    def push_string_to_s3(self,subfolder,string) -> bool:
+        s3 = boto3.resource('s3')
+        response = s3.Object(self.bucket, subfolder).put(Body=string)
+        return response['ResponseMetadata']['HTTPStatusCode'] == 200
+    
+    """
     Check if a subfolder exists in S3
 
     Args:
@@ -72,5 +87,18 @@ class S3Handler:
         bool: True if the subfolder was deleted, False otherwise
     """
     def delete_from_s3(self,subfolder) -> bool:
-        response = self.s3.delete_object(Bucket=self.bucket, Key=(subfolder + '/'))
+        response = self.s3.delete_object(Bucket=self.bucket, Key=subfolder)
+        return response['ResponseMetadata']['HTTPStatusCode'] == 200
+    
+    """
+    Create a subfolder in S3
+
+    Args:
+        subfolder (str): The subfolder to create
+
+    Returns:
+        bool: True if the subfolder was created, False otherwise
+    """
+    def create_subfolder(self,subfolder) -> bool:
+        response = self.s3.put_object(Bucket=self.bucket, Key=subfolder)
         return response['ResponseMetadata']['HTTPStatusCode'] == 200
