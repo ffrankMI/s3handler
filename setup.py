@@ -6,7 +6,7 @@ setup(
     version='0.0.1',
     author='Fabian Frank',
     description='S3 handler for AWS',
-    packages=find_packages(),
+    packages=['s3handler'],
     install_requires=[
         'boto3',
         'pandas'
